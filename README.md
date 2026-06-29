@@ -1,5 +1,12 @@
 # gokit
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/tmoeish/gokit.svg)](https://pkg.go.dev/github.com/tmoeish/gokit)
+[![CI](https://github.com/tmoeish/gokit/actions/workflows/ci.yml/badge.svg)](https://github.com/tmoeish/gokit/actions/workflows/ci.yml)
+[![Go Report Card](https://goreportcard.com/badge/github.com/tmoeish/gokit)](https://goreportcard.com/report/github.com/tmoeish/gokit)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/tmoeish/gokit)](go.mod)
+[![Release](https://img.shields.io/github/v/tag/tmoeish/gokit?label=release&sort=semver)](https://github.com/tmoeish/gokit/releases)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 > A batteries-included standard-library companion for Go — the Swiss Army knife
 > that Java developers know as [Guava](https://github.com/google/guava) and
 > JavaScript developers know as Lodash.
