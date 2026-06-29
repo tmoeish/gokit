@@ -146,6 +146,34 @@ gokit/
 └── README.md
 ```
 
+## Using gokit with AI coding agents
+
+gokit ships a **reuse-first skill** (`gokit-usage`) that teaches coding agents
+(Claude Code, etc.) to reach for gokit instead of hand-rolling slice/map/string/
+time/math/crypto/retry helpers in *your* project. Install it either way:
+
+**As a Claude Code plugin** (recommended — auto-updates with the repo):
+
+```text
+/plugin marketplace add tmoeish/gokit
+/plugin install gokit
+```
+
+**Or copy the skill** into your project or personal skills directory:
+
+```bash
+# project-local
+mkdir -p .claude/skills/gokit-usage
+curl -sL https://raw.githubusercontent.com/tmoeish/gokit/main/skills/gokit-usage/SKILL.md \
+  -o .claude/skills/gokit-usage/SKILL.md
+```
+
+The skill catalogs every package and maps "I'm about to write X" → "use gokit's Y."
+
+> Note: the `.claude/skills/gokit/` directory in *this* repo is a separate
+> **contributor** skill (`gokit-dev`) for developing gokit itself — not needed to
+> consume the library.
+
 ## Contributing & developing
 
 Run the full local check (format, vet, lint, test with race + coverage) before

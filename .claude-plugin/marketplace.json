@@ -1,0 +1,26 @@
+{
+  "name": "gokit",
+  "owner": {
+    "name": "tmoeish",
+    "url": "https://github.com/tmoeish"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for the gokit Go utility library.",
+    "version": "0.0.1"
+  },
+  "plugins": [
+    {
+      "name": "gokit",
+      "source": "./",
+      "description": "Reuse-first guidance for using gokit (Go's Guava/Lodash) in your own Go projects.",
+      "version": "0.0.1",
+      "author": {
+        "name": "tmoeish",
+        "url": "https://github.com/tmoeish"
+      },
+      "homepage": "https://github.com/tmoeish/gokit",
+      "license": "MIT",
+      "keywords": ["go", "golang", "utility"]
+    }
+  ]
+}

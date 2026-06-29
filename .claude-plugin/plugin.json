@@ -1,0 +1,13 @@
+{
+  "name": "gokit",
+  "version": "0.0.1",
+  "description": "Reuse-first guidance for using the gokit Go utility library (Go's Guava/Lodash) in your own projects. Bundles the gokit-usage skill so coding agents reach for gokit instead of hand-rolling slice/map/string/time/math/crypto/retry helpers.",
+  "author": {
+    "name": "tmoeish",
+    "url": "https://github.com/tmoeish"
+  },
+  "homepage": "https://github.com/tmoeish/gokit",
+  "repository": "https://github.com/tmoeish/gokit",
+  "license": "MIT",
+  "keywords": ["go", "golang", "utility", "guava", "lodash", "stdlib"]
+}

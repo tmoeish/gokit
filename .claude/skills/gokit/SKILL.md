@@ -1,9 +1,9 @@
 ---
-name: gokit
-description: "Work effectively in the github.com/tmoeish/gokit Go utility library (Go's Guava/Lodash). Use when adding, fixing, or reviewing helpers in this repo's xxx packages (slicex, mapx, strx, setx, etc.), or when a caller needs an existing gokit utility. Covers the package catalog, where new code goes, conventions, and the make-check harness."
+name: gokit-dev
+description: "Develop/contribute to the gokit library itself (this repo, github.com/tmoeish/gokit). Use when adding, fixing, or reviewing helpers in gokit's own xxx packages (slicex, mapx, strx, setx, etc.). Covers the package catalog, where new code goes, the conventions every change must follow, and the make-check harness. NOT for merely using gokit in another project — that's the gokit-usage skill."
 ---
 
-# gokit
+# gokit (contributor guide)
 
 `github.com/tmoeish/gokit` is a general-purpose, generics-first Go utility
 library — Go's answer to Guava/Lodash. A flat set of small, independent `xxx`
