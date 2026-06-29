@@ -1,0 +1,94 @@
+---
+name: gokit
+description: "Work effectively in the github.com/tmoeish/gokit Go utility library (Go's Guava/Lodash). Use when adding, fixing, or reviewing helpers in this repo's xxx packages (slicex, mapx, strx, setx, etc.), or when a caller needs an existing gokit utility. Covers the package catalog, where new code goes, conventions, and the make-check harness."
+---
+
+# gokit
+
+`github.com/tmoeish/gokit` is a general-purpose, generics-first Go utility
+library — Go's answer to Guava/Lodash. A flat set of small, independent `xxx`
+packages at the module root, each complementing one part of the standard
+library. **It is a library: no app, no `main`.** Every exported symbol is public
+API — add functions, never break existing signatures.
+
+The authoritative rules are in the repo's `AGENTS.md`. This skill is the quick
+operational map.
+
+## First, reuse before writing
+
+Before writing a utility, check whether gokit already has it. Package → domain:
+
+| Need… | Package | Examples |
+|------|---------|----------|
+| slice transforms / set ops | `slicex` | `Map Filter Reduce GroupBy Chunk Unique Intersection MinBy` |
+| map helpers | `mapx` | `Keys Values Merge Pick Omit Invert MapValues GroupBy` |
+| a Set collection | `setx` | `New Add Contains Union Intersection Difference IsSubsetOf` |
+| string helpers | `strx` | `IsBlank ToSnakeCase ToCamelCase Slugify Truncate Between Pad*` |
+| math | `mathx` | `Clamp Abs Sum Average GCD LCM Pow RoundTo SafeDivide` |
+| any→T conversion | `conv` | `ToString ToInt64 ToFloat64 ToBool` (+ `Must*`) |
+| time | `timex` | `BeginOfDay EndOfMonth DaysBetween AgeAt AddWorkDays ParseDate` |
+| randomness | `randx` | `String Int UUID WeightedChoice Shuffle Sample` |
+| hashing/encoding | `cryptox` | `SHA256 HMACSHA256 Base64Encode HexEncode` |
+| files/IO | `iox` | `ReadFile WriteLines FileExists CopyFile TempDir EnsureDir` |
+| JSON/YAML | `jsonx` | `Marshal Unmarshal MarshalPretty Clone JSONToYAML Get` |
+| network | `netx` | `LocalIP IsValidIP IsIPInCIDR GetFreePort ParseHostPort` |
+| pointers | `ptrx` | `Of Deref IsNil CoalescePtr` |
+| panic-on-error | `must` | `Must OK Assert` |
+| retries/backoff | `retry` | `Do DoWithResult With{MaxAttempts,ExponentialBackoff,Jitter}` |
+| concurrency | `syncx` | `SafeMap Once[T] WaitGroupCtx Notifier` |
+| context values | `contextx` | `WithValue Value WithReqID ReqID WithLogger Logger` |
+| structured logging | `logx` | `NewLogger Info/Error(ctx,…) LogError CallerLoc` |
+| HTTP envelope (no framework) | `httpx` | `Code NewSuccessResponse NewErrorResponse NewPageResponse` |
+| echo + httpx glue | `echox` | `Success Error Page RequestID() ErrorHandler` |
+
+Run `go doc github.com/tmoeish/gokit/<pkg>` for the full signature list.
+
+## Where new code goes
+
+1. **Default: extend the existing package** that owns the domain. A new string
+   helper goes in `strx`, a new slice helper in `slicex` — not a new package.
+2. **New package only for a new domain.** Then create `<pkg>/<pkg>.go` +
+   `<pkg>/<pkg>_test.go`, give the package a doc comment that credits any library
+   it borrows from, and add a row to `README.md`'s table and the list in
+   `doc.go`.
+3. **Framework/heavy deps go in their own package**, isolated like `echox`
+   isolates `labstack/echo` from the framework-agnostic `httpx`. Never pull such
+   a dep into a leaf utility package.
+
+## Conventions (match existing code exactly)
+
+- **Generics-first.** Type parameters (`[T any]`, `[K comparable]`,
+  `[T cmp.Ordered]`, local `Number`) over `any`/reflection.
+- **Pure.** Return new slices/maps; mutate inputs only when the name says so
+  (`Fill`, `Add`, `Remove`). Document ordering (or "unspecified order").
+- **Errors are values.** Fallible funcs return `error`; add a `Must*` variant
+  only when panicking is a sane caller choice. Lookups return `(T, bool)`.
+- **Doc comments** on every exported symbol, starting with its name
+  (`// Map applies …`) — enforced by `revive`.
+- **Don't duplicate** `slices`/`maps`/`cmp`/`strings`/`strconv`; extend/compose.
+
+## Tests
+
+Black-box: `package <pkg>_test`, standard library `testing` only (no assertion
+frameworks), `t.Fatalf("Name: got %v, want %v", got, want)`. Cover happy path +
+edge cases (empty, nil, single element, boundaries). See `mapx/map_test.go` or
+`setx/set_test.go` as templates.
+
+## Harness — run before declaring done
+
+```bash
+make check     # gofmt-check + go vet + golangci-lint + go test -race -cover
+make fmt       # gofmt -w (fix formatting)
+make test      # tests only
+```
+
+A change isn't done until `make check` is clean. CI (`.github/workflows/ci.yml`)
+runs the same on Go 1.22–1.24 plus golangci-lint (config: `.golangci.yml`, v2).
+
+## Definition of done
+
+1. Conventions + doc comments followed.
+2. Tests added; `make test` passes with `-race`.
+3. `make check` clean.
+4. README table + `doc.go` updated if a package was added/renamed.
+5. No breaking changes to exported signatures (add, don't mutate).

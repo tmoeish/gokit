@@ -1,0 +1,22 @@
+# Build / test artifacts
+coverage.out
+coverage.html
+*.test
+*.out
+
+# Go
+/bin/
+/dist/
+vendor/
+
+# Editor / OS
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local Claude Code settings (personal, not part of the project).
+# The shipped project skill under .claude/skills/ is intentionally tracked.
+.claude/settings.local.json
+.claude/settings.json

@@ -1,0 +1,41 @@
+# golangci-lint v2 configuration for gokit.
+# Install: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
+# Run:     make lint
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - errcheck      # unchecked errors
+    - govet         # suspicious constructs
+    - ineffassign   # ineffectual assignments
+    - staticcheck   # bug, simplification & style checks
+    - unused        # unused code
+    - misspell      # common misspellings
+    - unconvert     # redundant type conversions
+    - revive        # golint successor: doc comments, naming
+    - gocritic      # opinionated diagnostics
+    - prealloc      # slice preallocation hints
+  settings:
+    revive:
+      rules:
+        - name: exported
+          arguments: ["disableStutteringCheck"]
+    misspell:
+      locale: US
+  exclusions:
+    rules:
+      # Tests may skip error checks and exported-doc rules.
+      - path: _test\.go
+        linters:
+          - errcheck
+          - revive
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/tmoeish/gokit
