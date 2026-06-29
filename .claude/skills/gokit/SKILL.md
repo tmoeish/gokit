@@ -49,8 +49,9 @@ Run `go doc github.com/tmoeish/gokit/<pkg>` for the full signature list.
    helper goes in `strx`, a new slice helper in `slicex` — not a new package.
 2. **New package only for a new domain.** Then create `<pkg>/<pkg>.go` +
    `<pkg>/<pkg>_test.go`, give the package a doc comment that credits any library
-   it borrows from, and add a row to `README.md`'s table and the list in
-   `doc.go`.
+   it borrows from, and update **all four** discovery surfaces together:
+   `README.md` table, `doc.go` list, `.claude/skills/gokit/SKILL.md` (this file),
+   and `skills/gokit-usage/SKILL.md` (the consumer catalog).
 3. **Framework/heavy deps go in their own package**, isolated like `echox`
    isolates `labstack/echo` from the framework-agnostic `httpx`. Never pull such
    a dep into a leaf utility package.
@@ -83,12 +84,35 @@ make test      # tests only
 ```
 
 A change isn't done until `make check` is clean. CI (`.github/workflows/ci.yml`)
-runs the same on Go 1.22–1.24 plus golangci-lint (config: `.golangci.yml`, v2).
+runs the same on Go 1.22/1.24/1.26 plus golangci-lint. Config `.golangci.yml` is
+the **v2 schema** (`version: "2"`; `gofmt`/`goimports` live under `formatters:`)
+— don't rewrite it as v1.
+
+## Commit, privacy & release (public OSS repo)
+
+- **Commit identity = the public handle**, set repo-locally:
+  `tmoeish <tmoeish@users.noreply.github.com>`. Never author commits under a
+  personal real name/email; never commit `.claude/settings.local.json`.
+- **No private/historical info** in code or comments (internal repo names, ticket
+  IDs, hostnames, employer). Credit only public OSS in "inspired by" notes.
+- **Commit messages**: Conventional Commits (`feat:`/`fix:`/`docs:`), imperative,
+  ending with `Co-Authored-By: Claude <noreply@anthropic.com>`.
+- **Versioning is deliberate, not per-commit.** Don't auto-bump. Cut a tag only
+  when asked. SemVer pre-1.0: patch = fixes/docs/tooling, minor = new
+  package/function; avoid breaking changes pre-`v1.0.0`.
+- **On release**: tag annotated `vX.Y.Z` + push (the tag *is* the Go release);
+  `gh release create` if `gh` is authed; **bump `version` in both
+  `.claude-plugin/plugin.json` and `marketplace.json`** to match; verify with
+  `go list -m github.com/tmoeish/gokit@vX.Y.Z`.
+- **Don't push or tag unprompted** — these are outward-facing.
 
 ## Definition of done
 
 1. Conventions + doc comments followed.
 2. Tests added; `make test` passes with `-race`.
 3. `make check` clean.
-4. README table + `doc.go` updated if a package was added/renamed.
+4. New/renamed package → README table, `doc.go`, **and both skill catalogs**
+   updated.
 5. No breaking changes to exported signatures (add, don't mutate).
+6. Commit follows the privacy/message rules; no version bump or push unless the
+   user asked to release.
